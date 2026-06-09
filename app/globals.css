@@ -413,8 +413,33 @@ p {
   animation: fadeup 0.32s ease both;
 }
 
+/* ---------- responsive nav ---------- */
+.bottom-nav {
+  display: none;
+}
+@media (max-width: 767px) {
+  .sidebar-nav {
+    display: none !important;
+  }
+  .bottom-nav {
+    display: flex !important;
+  }
+  .app-main {
+    padding-bottom: 78px !important;
+  }
+  .field-row {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* ---------- print ---------- */
+.print-only {
+  display: none;
+}
 @media print {
+  .print-only {
+    display: block !important;
+  }
   body {
     background: #fff;
     color: #000;

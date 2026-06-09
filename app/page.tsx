@@ -83,7 +83,7 @@ export default function LandingPage() {
               all in one calm place — and it&apos;s right there on your phone
               when someone asks.
             </p>
-            <div className="row gap-2 wrap" style={{ margintop: 8 }}>
+            <div className="row gap-2 wrap" style={{ marginTop: 8 }}>
               <Link href="/signup" className="btn btn-accent">
                 Start your binder — $19 once
               </Link>
