@@ -74,7 +74,6 @@ export function BottomNav() {
         right: 0,
         background: "var(--paper)",
         borderTop: "1px solid var(--line)",
-        display: "flex",
         justifyContent: "space-around",
         padding: "6px 2px env(safe-area-inset-bottom)",
         zIndex: 40,

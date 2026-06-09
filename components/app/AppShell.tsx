@@ -3,7 +3,7 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { useConvexAuth, useQuery, useMutation } from "convex/react";
 import { useAuthActions } from "@convex-dev/auth/react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { api } from "@/convex/_generated/api";
 import type { Id } from "@/convex/_generated/dataModel";
 import { PetProvider, type PetDoc } from "./PetContext";
@@ -12,6 +12,8 @@ import { PetSwitcher } from "./PetSwitcher";
 import { BackupButtons } from "./BackupButtons";
 import { UnlockButton } from "./UnlockButton";
 import { AddPetForm } from "./AddPetForm";
+import { LockGate } from "./LockOverlay";
+import { TABS } from "./tabs";
 import { Modal } from "../Modal";
 import { Paw } from "../PawMotif";
 import { CARE_TASK_SEEDS } from "@/lib/defaults";
@@ -35,6 +37,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   const { isLoading, isAuthenticated } = useConvexAuth();
   const router = useRouter();
   const search = useSearchParams();
+  const pathname = usePathname();
   const { signOut } = useAuthActions();
 
   const user = useQuery(api.users.current, isAuthenticated ? {} : "skip");
@@ -193,7 +196,16 @@ export function AppShell({ children }: { children: ReactNode }) {
           )}
 
           <main className="app-main" style={{ padding: "24px", maxWidth: 1000 }}>
-            {children}
+            {(() => {
+              const tab = TABS.find((t) =>
+                t.href === "/app" ? pathname === "/app" : pathname.startsWith(t.href)
+              );
+              // Dashboard (free) is always open; other tabs need purchase.
+              if (tab && !tab.free) {
+                return <LockGate title={tab.label}>{children}</LockGate>;
+              }
+              return children;
+            })()}
           </main>
         </div>
       </div>
