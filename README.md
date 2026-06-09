@@ -1,36 +1,73 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🐾 Pet Health Binder
 
-## Getting Started
+A warm, multi-device pet health & care dashboard sold as a one-time **$19**
+digital product. Keep vaccines, medications, vet visits, weight, grooming,
+expenses, and a printable sitter sheet for every pet — synced across laptop,
+tablet, and phone.
 
-First, run the development server:
+Built with **Next.js (App Router)** + **Convex** (database, reactive sync &
+auth) + **Stripe** (one-time purchase). The front-end is a warm, hand-crafted
+design (Fraunces + Inter; cream / forest / terracotta) — intentionally not
+clinical.
+
+## Features
+
+- **8 tabs:** Dashboard (needs-attention engine + weight sparkline), Vaccines
+  (status chips + printable certificate), Medications (daily checklist + streak
+  + archive), Vet visits, Weight (chart), Grooming (recurring care), Expenses
+  (totals + category chart + YoY), and the **Sitter Sheet** (auto-filled,
+  printable care sheet).
+- **Multi-pet**, multi-device cloud sync, email + password auth.
+- **One-time $19** unlock via Stripe Checkout; the dashboard is a free teaser.
+- **Back up / restore** your whole binder as JSON.
+- `?demo=1` loads a fully-populated sample pet (Cooper) for screenshots.
+
+## Local development
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
+npx convex dev          # provisions a dev deployment, writes .env.local, watches functions
+# in a second terminal:
+pnpm dev                # Next.js dev server
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+First-time auth setup (once per deployment):
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npx @convex-dev/auth --web-server-url http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Stripe (test mode)
 
-## Learn More
+Set these on the **Convex** deployment (they power the checkout action + webhook):
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npx convex env set STRIPE_SECRET_KEY sk_test_xxx
+npx convex env set STRIPE_WEBHOOK_SECRET whsec_xxx
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Point a Stripe webhook at `https://<your-deployment>.convex.site/stripe/webhook`
+for the `checkout.session.completed` event.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Testing
 
-## Deploy on Vercel
+```bash
+pnpm test        # vitest — pure logic (dates, meds/streaks, backup)
+pnpm build       # full production build + typecheck
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Deploy
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+GitHub → Vercel. Set the Vercel **build command** to:
+
+```bash
+npx convex deploy --cmd 'pnpm build'
+```
+
+and add `CONVEX_DEPLOY_KEY` (from the Convex dashboard) to Vercel. Set the
+production `SITE_URL` and Stripe keys on the Convex **prod** deployment.
+
+## Notes
+
+- Not a substitute for veterinary advice.
+- All data is private to each user's account.
