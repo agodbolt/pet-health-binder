@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Convex generates this; shimmed locally until `npx convex dev` runs
+convex/_generated/
