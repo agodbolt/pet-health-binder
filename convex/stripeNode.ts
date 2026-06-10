@@ -52,6 +52,79 @@ export const createCheckoutSession = action({
   },
 });
 
+/**
+ * Create a $19 Checkout Session for a NEW buyer (no account yet).
+ * Stripe collects their email + payment; after paying they set a password.
+ */
+export const createGuestCheckout = action({
+  args: { origin: v.string() },
+  handler: async (_ctx, { origin }): Promise<{ url: string }> => {
+    const stripe = stripeClient();
+    const session = await stripe.checkout.sessions.create({
+      mode: "payment",
+      payment_method_types: ["card"],
+      line_items: [
+        {
+          quantity: 1,
+          price_data: {
+            currency: "usd",
+            unit_amount: PRICE_CENTS,
+            product_data: {
+              name: "Pet Health Binder — full access",
+              description:
+                "Unlimited pets, multi-device sync, vaccines, meds, sitter sheet & more. One-time purchase.",
+            },
+          },
+        },
+      ],
+      success_url: `${origin}/welcome?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${origin}/`,
+    });
+    if (!session.url) throw new Error("Stripe did not return a checkout URL.");
+    return { url: session.url };
+  },
+});
+
+/** Read the buyer email + paid status for a checkout session (for /welcome). */
+export const getCheckoutInfo = action({
+  args: { sessionId: v.string() },
+  handler: async (
+    _ctx,
+    { sessionId }
+  ): Promise<{ paid: boolean; email: string | null }> => {
+    const stripe = stripeClient();
+    const session = await stripe.checkout.sessions.retrieve(sessionId);
+    return {
+      paid: session.payment_status === "paid",
+      email: session.customer_details?.email ?? null,
+    };
+  },
+});
+
+/**
+ * After the buyer sets a password (and is now signed in), verify their paid
+ * Stripe session and grant access. Tied to the session id (single use).
+ */
+export const claimPurchase = action({
+  args: { sessionId: v.string() },
+  handler: async (ctx, { sessionId }): Promise<{ ok: boolean }> => {
+    const userId = (await getAuthUserId(ctx)) as Id<"users"> | null;
+    if (!userId) throw new Error("You need to be signed in to claim a purchase.");
+    const stripe = stripeClient();
+    const session = await stripe.checkout.sessions.retrieve(sessionId);
+    if (session.payment_status !== "paid") {
+      throw new Error("This purchase hasn't completed yet.");
+    }
+    await ctx.runMutation(internal.payments.grantPurchase, {
+      userId,
+      sessionId,
+      stripeCustomerId:
+        typeof session.customer === "string" ? session.customer : undefined,
+    });
+    return { ok: true };
+  },
+});
+
 /** Verify + handle a Stripe webhook payload. Called from the HTTP route. */
 export const handleWebhook = internalAction({
   args: { payload: v.string(), signature: v.string() },

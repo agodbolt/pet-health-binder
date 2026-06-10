@@ -20,10 +20,13 @@ export default defineSchema({
     email: v.optional(v.string()),
     hasPaid: v.boolean(),
     stripeCustomerId: v.optional(v.string()),
+    purchaseSessionId: v.optional(v.string()),
     weightUnit: v.union(v.literal("lb"), v.literal("kg")),
     currency: v.string(),
     activePetId: v.optional(v.id("pets")),
-  }).index("by_user", ["userId"]),
+  })
+    .index("by_user", ["userId"])
+    .index("by_purchase", ["purchaseSessionId"]),
 
   pets: defineTable({
     userId: v.id("users"),

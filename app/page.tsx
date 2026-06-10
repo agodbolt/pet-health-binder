@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Paw } from "@/components/PawMotif";
+import { BuyButton } from "@/components/BuyButton";
 
 export default function LandingPage() {
   return (
@@ -49,9 +50,7 @@ export default function LandingPage() {
             <Link href="/login" style={{ fontWeight: 550 }}>
               Log in
             </Link>
-            <Link href="/signup" className="btn btn-sm">
-              Get the binder
-            </Link>
+            <BuyButton className="btn btn-sm">Get the binder</BuyButton>
           </nav>
         </div>
       </header>
@@ -84,9 +83,9 @@ export default function LandingPage() {
               when someone asks.
             </p>
             <div className="row gap-2 wrap" style={{ marginTop: 8 }}>
-              <Link href="/signup" className="btn btn-accent">
+              <BuyButton className="btn btn-accent">
                 Start your binder — $19 once
-              </Link>
+              </BuyButton>
               <Link href="/login" className="btn btn-ghost">
                 I already have one
               </Link>
@@ -280,13 +279,11 @@ export default function LandingPage() {
               calm printable page with your pet&apos;s photo. It fills itself in
               from what&apos;s already in your binder.
             </p>
-            <Link
-              href="/signup"
-              className="btn btn-accent"
-              style={{ marginTop: 8 }}
-            >
-              Make my sitter sheet
-            </Link>
+            <div style={{ marginTop: 8 }}>
+              <BuyButton className="btn btn-accent">
+                Make my sitter sheet
+              </BuyButton>
+            </div>
           </div>
           <div
             className="card"
@@ -377,9 +374,9 @@ export default function LandingPage() {
               </li>
             ))}
           </ul>
-          <Link href="/signup" className="btn btn-accent btn-block">
+          <BuyButton className="btn btn-accent btn-block">
             Get the binder
-          </Link>
+          </BuyButton>
         </div>
       </section>
 
