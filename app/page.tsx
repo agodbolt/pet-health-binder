@@ -102,7 +102,7 @@ function Hero() {
             For most of us the honest answer is &ldquo;uhh… let me think.&rdquo;
             The rabies date is on a card somewhere. The pills are in your head.
             The vet&apos;s number is buried in your phone. Pet Health Binder puts
-            every bit of it in one calm place — and it&apos;s right there in your
+            every bit of it in one calm place, and it&apos;s right there in your
             pocket the second someone asks.
           </p>
           <div
@@ -110,7 +110,7 @@ function Hero() {
             style={{ marginTop: 10, animationDelay: "180ms" }}
           >
             <BuyButton className="btn btn-accent">
-              Get my binder — $19 once
+              Get my binder for $19
             </BuyButton>
             <Link href="/login" className="btn btn-ghost">
               I already have one
@@ -150,9 +150,9 @@ function Hero() {
                 </div>
               </div>
             </div>
-            <AlertRow tone="red" title="❌ Rabies — 12 days overdue" sub="Maple Street Animal Hospital" />
-            <AlertRow tone="amber" title="⚠️ Apoquel refill — due in 9 days" sub="16mg · twice daily" />
-            <AlertRow tone="green" title="✅ Bordetella — current" sub="Good through next spring" />
+            <AlertRow tone="red" title="❌ Rabies · 12 days overdue" sub="Maple Street Animal Hospital" />
+            <AlertRow tone="amber" title="⚠️ Apoquel refill · due in 9 days" sub="16mg · twice daily" />
+            <AlertRow tone="green" title="✅ Bordetella · current" sub="Good through next spring" />
           </div>
           <div
             style={{
@@ -245,7 +245,7 @@ function Problem() {
       <Reveal>
         <span className="eyebrow">Be honest for a second</span>
         <h2 style={{ fontSize: "clamp(1.7rem, 3.2vw, 2.3rem)", margin: "10px 0 16px" }}>
-          Your pet&apos;s whole history is scattered across six places — and
+          Your pet&apos;s whole history is scattered across six places, and
           most of those places are inside your head.
         </h2>
       </Reveal>
@@ -254,15 +254,16 @@ function Problem() {
           The last rabies shot? On a paper somewhere, you think. The pills he
           takes? You know the names… roughly. When the next flea treatment is
           due? You&apos;ll &ldquo;remember.&rdquo; The vet&apos;s number, the
-          microchip number, what the vet said at the last visit — scattered, or
+          microchip number, what the vet said at the last visit. Scattered, or
           gone.
         </p>
       </Reveal>
       <Reveal delay={140}>
         <p style={{ fontSize: "1.1rem", color: "var(--ink-soft)" }}>
-          And it&apos;s all fine. Right up until the one day it isn&apos;t — when
-          somebody needs a real answer, fast, and &ldquo;I&apos;ll remember&rdquo;
-          turns out to be the worst filing system you ever trusted.
+          And it&apos;s all fine. Right up until the one day it isn&apos;t.
+          Somebody needs a real answer, fast, and &ldquo;I&apos;ll
+          remember&rdquo; turns out to be the worst filing system you ever
+          trusted.
         </p>
       </Reveal>
     </section>
@@ -275,7 +276,7 @@ function Scenarios() {
     {
       emoji: "🚨",
       title: "The 2am emergency",
-      body: "He&apos;s shaking and you&apos;re terrified. The vet asks one simple question — what is he on, and what&apos;s he allergic to? Every second you spend guessing is a second they can&apos;t treat him.",
+      body: "He&apos;s shaking and you&apos;re terrified. The vet asks one simple question. What is he on, and what&apos;s he allergic to? Every second you spend guessing is a second they can&apos;t treat him.",
     },
     {
       emoji: "🧳",
@@ -285,7 +286,7 @@ function Scenarios() {
     {
       emoji: "📱",
       title: "The sitter text at dinner",
-      body: "&ldquo;Hey — how much food does he get? And does he take a pill at night?&rdquo; You&apos;re out. You&apos;re typing it from memory and hoping you got the dose right.",
+      body: "&ldquo;Hey, how much food does he get? And does he take a pill at night?&rdquo; You&apos;re out at dinner, typing it from memory and hoping you got the dose right.",
     },
   ];
   return (
@@ -326,11 +327,11 @@ function Solution() {
             One calm place for everything. In your pocket. Always up to date.
           </h2>
           <p style={{ fontSize: "1.12rem", color: "var(--ink-soft)" }}>
-            You spend ten quiet minutes once putting it all in — the shots, the
+            You spend ten quiet minutes once putting it all in: the shots, the
             pills, the vet, the quirks. After that, the binder does the
-            remembering. It tells you what&apos;s overdue, what&apos;s coming up,
-            and hands you the answer the moment anyone asks — at the clinic, the
-            boarding desk, or your own front door.
+            remembering. It tells you what&apos;s overdue and what&apos;s coming
+            up, and it hands you the answer the moment anyone asks, whether
+            that&apos;s the clinic, the boarding desk, or your own front door.
           </p>
         </Reveal>
       </div>
@@ -349,22 +350,22 @@ function Features() {
     {
       emoji: "💊",
       title: "Meds you actually keep up with",
-      body: "Doses, refill dates, and a dead-simple daily checklist so you never stand there wondering if he had his morning pill. It even keeps a little streak going — strangely satisfying when you&apos;re caring for a sick pet.",
+      body: "Doses, refill dates, and a dead-simple daily checklist so you never stand there wondering if he had his morning pill. It even keeps a little streak going, which is oddly satisfying when you&apos;re caring for a sick pet.",
     },
     {
       emoji: "🩺",
       title: "The whole vet story, remembered",
-      body: "Reason, diagnosis, treatment, cost, and the follow-up date for every visit. So the next vet — or the next you, a year from now — has the full picture instead of a foggy guess.",
+      body: "Reason, diagnosis, treatment, cost, and the follow-up date for every visit. So the next vet (or the next you, a year from now) has the full picture instead of a foggy guess.",
     },
     {
       emoji: "⚖️",
       title: "Weight you can finally see",
-      body: "A gentle line over time with notes like &lsquo;new food&rsquo; or &lsquo;post-surgery.&rsquo; The slow creep that&apos;s hard to notice day to day becomes obvious — early, while it&apos;s still easy to fix.",
+      body: "A gentle line over time with notes like &lsquo;new food&rsquo; or &lsquo;post-surgery.&rsquo; The slow creep that&apos;s hard to notice day to day becomes obvious early, while it&apos;s still easy to fix.",
     },
     {
       emoji: "🛁",
       title: "Grooming & care that nudge you",
-      body: "Nail trims, baths, flea &amp; tick, heartworm — set to repeat on your schedule. One tap marks it done and sets the next. No more &lsquo;wait, when did we last…?&rsquo;",
+      body: "Nail trims, baths, flea and tick, heartworm, all set to repeat on your schedule. One tap marks it done and sets the next. No more &lsquo;wait, when did we last…?&rsquo;",
     },
   ];
   return (
@@ -424,12 +425,13 @@ function SitterSpotlight() {
             Going away? Hand your sitter one page that thinks of everything.
           </h2>
           <p style={{ color: "rgba(255,255,255,0.85)", fontSize: "1.08rem" }}>
-            Feeding times. The pills, explained in plain words — not &ldquo;16mg
-            BID&rdquo; but &ldquo;half a tablet hidden in a treat, morning and
-            night.&rdquo; The walk routine. The &ldquo;hides during storms&rdquo;
-            quirks. Your number, the vet, the emergency vet, the microchip. It
-            fills itself in from what&apos;s already in your binder, then prints
-            into one calm sheet with your pet&apos;s photo on top.
+            Feeding times. The pills explained in plain words, so instead of
+            &ldquo;16mg BID&rdquo; it reads &ldquo;half a tablet hidden in a
+            treat, morning and night.&rdquo; The walk routine. The &ldquo;hides
+            during storms&rdquo; quirks. Your number, the vet, the emergency vet,
+            the microchip. It fills itself in from what&apos;s already in your
+            binder, then prints into one calm sheet with your pet&apos;s photo on
+            top.
           </p>
           <p style={{ color: "rgba(255,255,255,0.85)", fontSize: "1.08rem" }}>
             Leave it on the counter and actually relax on your trip.
@@ -452,10 +454,10 @@ function SitterSpotlight() {
               </div>
             </div>
             <div style={{ padding: 20, fontSize: "0.9rem" }}>
-              <SitterRow label="Food" value="½ cup Hill's, twice daily — 8am & 7pm" />
+              <SitterRow label="Food" value="½ cup Hill's, twice daily (8am and 7pm)" />
               <SitterRow label="Meds" value="Half a thyroid tablet in a treat, every morning" />
               <SitterRow label="Litter" value="Scoop daily; she likes it very clean" />
-              <SitterRow label="Good to know" value="Hides under the bed in storms — let her be" />
+              <SitterRow label="Good to know" value="Hides under the bed in storms, so just let her be" />
               <SitterRow label="Emergency vet" value="Riverside 24hr · (555) 911-0000" />
             </div>
           </div>
@@ -489,7 +491,7 @@ function Comparison() {
     "Pills remembered &lsquo;roughly&rsquo;",
     "Vet bills stuffed in a drawer",
     "Sitter instructions typed from memory",
-    "&lsquo;When was the last flea treatment?&rsquo; — no idea",
+    "&lsquo;When was the last flea treatment?&rsquo; Who knows",
     "Each pet&apos;s history in a different place",
   ];
   const after = [
@@ -569,7 +571,7 @@ function FitOrNot() {
           <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "grid", gap: 12 }}>
             {[
               "You genuinely keep perfect paper records and never misplace them",
-              "You want a social network for pets — this is a quiet, private binder",
+              "You want a social network for pets (this is a quiet, private binder)",
               "You&apos;d rather keep trusting your memory and hope for the best",
             ].map((t) => (
               <li key={t} className="row gap-1" style={{ alignItems: "flex-start" }}>
@@ -597,7 +599,7 @@ function Testimonials() {
       who: "Marcus T., Labrador dad",
     },
     {
-      q: "My senior dog has four meds and a weight we&apos;re watching. Seeing it all on one screen — and getting nudged before a refill runs out — took a real weight off my chest.",
+      q: "My senior dog has four meds and a weight we&apos;re watching. Seeing it all on one screen, and getting nudged before a refill runs out, took a real weight off my chest.",
       who: "Priya S., one very spoiled beagle",
     },
   ];
@@ -620,7 +622,7 @@ function Testimonials() {
                 dangerouslySetInnerHTML={{ __html: `&ldquo;${t.q}&rdquo;` }}
               />
               <figcaption className="faint" style={{ marginTop: 12, fontSize: "0.85rem" }}>
-                — {t.who}
+                {t.who}
               </figcaption>
             </figure>
           </Reveal>
@@ -643,8 +645,8 @@ function Founder() {
           </h2>
           <p style={{ fontSize: "1.08rem", color: "var(--ink-soft)" }}>
             My dog got into something he shouldn&apos;t have, late at night. At
-            the emergency vet they asked simple questions — his weight, his meds,
-            his last vaccines — and I stood there guessing while the clock ran.
+            the emergency vet they asked simple questions. His weight, his meds,
+            his last vaccines. I stood there guessing while the clock ran.
             He was fine. I was not. I swore I&apos;d never feel that helpless
             again.
           </p>
@@ -682,12 +684,12 @@ function Pricing() {
           </div>
           <ul style={{ textAlign: "left", listStyle: "none", padding: 0, margin: "18px 0 24px", display: "grid", gap: 11 }}>
             {[
-              "Unlimited pets — dogs, cats, rabbits, birds & more",
+              "Unlimited pets: dogs, cats, rabbits, birds & more",
               "Vaccines, meds, vet visits, weight, grooming & expenses",
               "The auto-filling printable sitter sheet",
               "Overdue & due-soon reminders, done for you",
               "Syncs across your phone, tablet & laptop",
-              "Download a full backup any time — your data is yours",
+              "Download a full backup any time. Your data is yours",
               "No subscription. No ads. No selling your info.",
             ].map((t) => (
               <li key={t} className="row gap-1" style={{ alignItems: "flex-start" }}>
@@ -696,9 +698,9 @@ function Pricing() {
               </li>
             ))}
           </ul>
-          <BuyButton className="btn btn-accent btn-block">Get the binder — $19</BuyButton>
+          <BuyButton className="btn btn-accent btn-block">Get the binder for $19</BuyButton>
           <p className="faint" style={{ marginTop: 14, fontSize: "0.85rem" }}>
-            Try it for 30 days. If it&apos;s not for you, email us for a full
+            Try it for 14 days. If it&apos;s not for you, email us for a full
             refund and keep your backup. No hard feelings.
           </p>
         </div>
@@ -734,12 +736,12 @@ function FinalCta() {
           </h2>
           <p style={{ color: "rgba(255,255,255,0.85)", fontSize: "1.1rem", marginBottom: 24 }}>
             Ten quiet minutes today buys you a calm answer on the worst day. Set
-            up your binder once — it&apos;s with you, and your sitter, and your
-            vet, from now on.
+            up your binder once. After that it&apos;s with you, your sitter, and
+            your vet, from now on.
           </p>
-          <BuyButton className="btn btn-accent">Get my binder — $19 once</BuyButton>
+          <BuyButton className="btn btn-accent">Get my binder for $19</BuyButton>
           <p style={{ color: "rgba(255,255,255,0.7)", fontSize: "0.85rem", marginTop: 14 }}>
-            One payment · works on every device · 30-day refund
+            One payment · works on every device · 14-day refund
           </p>
         </Reveal>
       </div>

@@ -13,11 +13,11 @@ const ITEMS: { q: string; a: string }[] = [
   },
   {
     q: "Does it work on my phone?",
-    a: "It works on your phone, your tablet, and your laptop — and they all stay in sync. Add a vet visit on your laptop tonight; it's on your phone at the clinic tomorrow.",
+    a: "It works on your phone, your tablet, and your laptop, and they all stay in sync. Add a vet visit on your laptop tonight and it's on your phone at the clinic tomorrow.",
   },
   {
     q: "I have more than one pet. Is that extra?",
-    a: "Add as many as you love — dogs, cats, rabbits, birds — for the same one price. Switch between them with a tap.",
+    a: "Add as many as you love (dogs, cats, rabbits, birds) for the same one price. Switch between them with a tap.",
   },
   {
     q: "Who can see my pet's information?",
@@ -25,11 +25,11 @@ const ITEMS: { q: string; a: string }[] = [
   },
   {
     q: "What if I want to leave?",
-    a: "Tap 'Back up my data' and you get a clean copy of everything to keep. Your records are yours — we never hold them hostage.",
+    a: "Tap 'Back up my data' and you get a clean copy of everything to keep. Your records are yours, and we never hold them hostage.",
   },
   {
     q: "Is this medical advice?",
-    a: "No — it's a place to keep your records and reminders organized. Always follow your vet for medical decisions. We just make sure you can find the dates and doses when you need them.",
+    a: "No. It's a place to keep your records and reminders organized. Always follow your vet for medical decisions. We just make sure you can find the dates and doses when you need them.",
   },
 ];
 
