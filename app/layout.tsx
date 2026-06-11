@@ -16,7 +16,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Pet Health Binder — every vaccine, med & vet visit in one calm place",
+  title: "Pet Health Binder: every vaccine, med & vet visit in one calm place",
   description:
     "Keep your dog's or cat's vaccines, medications, vet visits, weight, grooming and a printable sitter sheet in one tidy binder that syncs across all your devices.",
 };
