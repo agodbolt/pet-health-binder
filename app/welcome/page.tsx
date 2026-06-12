@@ -1,12 +1,13 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useAction } from "convex/react";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { api } from "@/convex/_generated/api";
 import { Paw } from "@/components/PawMotif";
+import { fbqTrack } from "@/components/MetaPixel";
 
 export default function WelcomePage() {
   return (
@@ -30,6 +31,7 @@ function Welcome() {
   const [mode, setMode] = useState<"signUp" | "signIn">("signUp");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const purchaseTracked = useRef(false);
 
   // Look up the purchase details from Stripe.
   useEffect(() => {
@@ -41,6 +43,15 @@ function Welcome() {
       .then((info) => {
         setPaid(info.paid);
         if (info.email) setEmail(info.email);
+        // Reaching /welcome with a paid session IS the completed purchase.
+        if (info.paid && !purchaseTracked.current) {
+          purchaseTracked.current = true;
+          fbqTrack("Purchase", {
+            value: 19,
+            currency: "USD",
+            content_name: "Pet Health Binder",
+          });
+        }
       })
       .catch(() => setPaid(false));
   }, [sessionId, getInfo]);

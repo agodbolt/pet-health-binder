@@ -3,9 +3,10 @@
 import { useState } from "react";
 import { useAction } from "convex/react";
 import { api } from "@/convex/_generated/api";
+import { fbqTrack } from "@/components/MetaPixel";
 
 export function UnlockButton({
-  label = "Unlock everything — $19",
+  label = "Unlock everything for $19",
   block,
 }: {
   label?: string;
@@ -18,6 +19,7 @@ export function UnlockButton({
   async function go() {
     setBusy(true);
     setError(null);
+    fbqTrack("InitiateCheckout", { value: 19, currency: "USD" });
     try {
       const { url } = await checkout({ origin: window.location.origin });
       window.location.href = url;

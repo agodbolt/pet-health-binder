@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useAction } from "convex/react";
 import { api } from "@/convex/_generated/api";
+import { fbqTrack } from "@/components/MetaPixel";
 
 /** Landing-page CTA: goes straight to Stripe Checkout (pay first, account after). */
 export function BuyButton({
@@ -19,6 +20,7 @@ export function BuyButton({
   async function go() {
     setBusy(true);
     setError(null);
+    fbqTrack("InitiateCheckout", { value: 19, currency: "USD" });
     try {
       const { url } = await checkout({ origin: window.location.origin });
       window.location.href = url;

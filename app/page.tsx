@@ -3,10 +3,12 @@ import { Paw } from "@/components/PawMotif";
 import { BuyButton } from "@/components/BuyButton";
 import { Reveal } from "@/components/landing/Reveal";
 import { Faq } from "@/components/landing/Faq";
+import { TrackViewContent } from "@/components/landing/TrackViewContent";
 
 export default function LandingPage() {
   return (
     <main>
+      <TrackViewContent />
       <Nav />
       <Hero />
       <BreedMarquee />

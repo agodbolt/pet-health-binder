@@ -16,6 +16,7 @@ import { LockGate } from "./LockOverlay";
 import { TABS } from "./tabs";
 import { Modal } from "../Modal";
 import { Paw } from "../PawMotif";
+import { fbqTrack } from "../MetaPixel";
 import { CARE_TASK_SEEDS } from "@/lib/defaults";
 
 function FullScreenMessage({ children }: { children: ReactNode }) {
@@ -51,6 +52,7 @@ export function AppShell({ children }: { children: ReactNode }) {
 
   const [showAdd, setShowAdd] = useState(false);
   const bootstrapped = useRef(false);
+  const purchaseTracked = useRef(false);
   const demoTried = useRef(false);
 
   // redirect unauthenticated visitors to login
@@ -65,6 +67,18 @@ export function AppShell({ children }: { children: ReactNode }) {
       ensureProfile().catch(() => {});
     }
   }, [isAuthenticated, ensureProfile]);
+
+  // ?paid=1 (in-app upgrade success redirect) fires the Meta Purchase event once
+  useEffect(() => {
+    if (search.get("paid") === "1" && !purchaseTracked.current) {
+      purchaseTracked.current = true;
+      fbqTrack("Purchase", {
+        value: 19,
+        currency: "USD",
+        content_name: "Pet Health Binder",
+      });
+    }
+  }, [search]);
 
   // ?demo=1 loads a sample pet once
   useEffect(() => {
