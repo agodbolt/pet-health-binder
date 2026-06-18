@@ -19,6 +19,7 @@ export default defineSchema({
     userId: v.id("users"),
     email: v.optional(v.string()),
     hasPaid: v.boolean(),
+    hasPack: v.optional(v.boolean()),
     stripeCustomerId: v.optional(v.string()),
     purchaseSessionId: v.optional(v.string()),
     weightUnit: v.union(v.literal("lb"), v.literal("kg")),

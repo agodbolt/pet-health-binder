@@ -157,6 +157,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         weightUnit: (user?.weightUnit ?? "lb") as "lb" | "kg",
         currency: user?.currency ?? "$",
         hasPaid,
+        hasPack: user?.hasPack ?? false,
       }}
     >
       <div style={{ display: "flex", minHeight: "100vh" }}>

@@ -5,18 +5,28 @@ import type { Id } from "./_generated/dataModel";
 
 /** Flip a user to paid. Called by the Stripe webhook (internal only). */
 export const fulfillPayment = internalMutation({
-  args: { userId: v.id("users"), stripeCustomerId: v.optional(v.string()) },
-  handler: async (ctx, { userId, stripeCustomerId }) => {
+  args: {
+    userId: v.id("users"),
+    stripeCustomerId: v.optional(v.string()),
+    hasPack: v.optional(v.boolean()),
+  },
+  handler: async (ctx, { userId, stripeCustomerId, hasPack }) => {
     const profile = await ctx.db
       .query("profiles")
       .withIndex("by_user", (q) => q.eq("userId", userId))
       .unique();
     if (profile) {
-      await ctx.db.patch(profile._id, { hasPaid: true, stripeCustomerId });
+      await ctx.db.patch(profile._id, {
+        hasPaid: true,
+        stripeCustomerId,
+        // never downgrade an already-owned pack
+        hasPack: hasPack || profile.hasPack || undefined,
+      });
     } else {
       await ctx.db.insert("profiles", {
         userId,
         hasPaid: true,
+        hasPack: hasPack || undefined,
         stripeCustomerId,
         weightUnit: "lb",
         currency: "$",
@@ -30,8 +40,13 @@ export const fulfillPayment = internalMutation({
  * Tied to the Stripe session id so the same payment can't unlock two accounts.
  */
 export const grantPurchase = internalMutation({
-  args: { userId: v.id("users"), sessionId: v.string(), stripeCustomerId: v.optional(v.string()) },
-  handler: async (ctx, { userId, sessionId, stripeCustomerId }) => {
+  args: {
+    userId: v.id("users"),
+    sessionId: v.string(),
+    stripeCustomerId: v.optional(v.string()),
+    hasPack: v.optional(v.boolean()),
+  },
+  handler: async (ctx, { userId, sessionId, stripeCustomerId, hasPack }) => {
     // Reject if this purchase was already claimed by a different account.
     const claimed = await ctx.db
       .query("profiles")
@@ -48,6 +63,7 @@ export const grantPurchase = internalMutation({
       await ctx.db.patch(profile._id, {
         hasPaid: true,
         purchaseSessionId: sessionId,
+        hasPack: hasPack || profile.hasPack || undefined,
         stripeCustomerId: stripeCustomerId ?? profile.stripeCustomerId,
       });
     } else {
@@ -55,6 +71,7 @@ export const grantPurchase = internalMutation({
         userId,
         hasPaid: true,
         purchaseSessionId: sessionId,
+        hasPack: hasPack || undefined,
         stripeCustomerId,
         weightUnit: "lb",
         currency: "$",

@@ -22,6 +22,7 @@ export const current = query({
       userId,
       email: user?.email ?? profile?.email ?? null,
       hasPaid: profile?.hasPaid ?? false,
+      hasPack: profile?.hasPack ?? false,
       weightUnit: profile?.weightUnit ?? ("lb" as const),
       currency: profile?.currency ?? "$",
       activePetId: profile?.activePetId ?? null,

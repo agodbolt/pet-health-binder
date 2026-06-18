@@ -10,6 +10,7 @@ import { formatWeight, formatDate, duePhrase } from "@/lib/format";
 import { StatusChip } from "@/components/StatusChip";
 import { Sparkline } from "@/components/Sparkline";
 import { EmptyState } from "@/components/EmptyState";
+import { RecommendedGear } from "@/components/app/RecommendedGear";
 
 interface AttnItem {
   key: string;
@@ -22,7 +23,7 @@ interface AttnItem {
 }
 
 export default function DashboardPage() {
-  const { pet, weightUnit } = usePet();
+  const { pet, weightUnit, hasPack } = usePet();
   const petId = pet?._id;
   const skip = petId ? { petId } : "skip";
 
@@ -185,6 +186,29 @@ export default function DashboardPage() {
           </div>
         )}
       </div>
+
+      {hasPack && (
+        <Link
+          href="/app/emergency-kit"
+          className="card lift"
+          data-noprint
+          style={{ display: "block", textDecoration: "none" }}
+        >
+          <div className="row gap-2">
+            <span style={{ fontSize: 26 }}>🚑</span>
+            <div>
+              <div style={{ fontWeight: 600, color: "var(--charcoal)" }}>
+                Your Pet Emergency Kit
+              </div>
+              <div className="muted" style={{ fontSize: "0.88rem" }}>
+                Print the wallet card, fridge chart &amp; lost-pet flyer →
+              </div>
+            </div>
+          </div>
+        </Link>
+      )}
+
+      <RecommendedGear limit={3} title={`Recommended for ${pet.name}`} />
     </div>
   );
 }

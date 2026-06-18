@@ -47,7 +47,7 @@ function Welcome() {
         if (info.paid && !purchaseTracked.current) {
           purchaseTracked.current = true;
           fbqTrack("Purchase", {
-            value: 19,
+            value: info.hasPack ? 28 : 19,
             currency: "USD",
             content_name: "Pet Health Binder",
           });

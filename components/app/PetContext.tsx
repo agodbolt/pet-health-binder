@@ -23,6 +23,7 @@ export interface PetContextValue {
   weightUnit: "lb" | "kg";
   currency: string;
   hasPaid: boolean;
+  hasPack: boolean;
 }
 
 const PetContext = createContext<PetContextValue | null>(null);

@@ -3,9 +3,10 @@
 import { useState } from "react";
 import { useAction } from "convex/react";
 import { api } from "@/convex/_generated/api";
-import { fbqTrack } from "@/components/MetaPixel";
+import { CheckoutModal } from "@/components/CheckoutModal";
 
-/** Landing-page CTA: goes straight to Stripe Checkout (pay first, account after). */
+/** Landing-page CTA: opens the order summary (with the Emergency Kit bump),
+ *  then sends to Stripe Checkout (pay first, account after). */
 export function BuyButton({
   children,
   className = "btn btn-accent",
@@ -14,31 +15,20 @@ export function BuyButton({
   className?: string;
 }) {
   const checkout = useAction(api.stripeNode.createGuestCheckout);
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  async function go() {
-    setBusy(true);
-    setError(null);
-    fbqTrack("InitiateCheckout", { value: 19, currency: "USD" });
-    try {
-      const { url } = await checkout({ origin: window.location.origin });
-      window.location.href = url;
-    } catch {
-      setError("Checkout isn't available right now — please try again shortly.");
-      setBusy(false);
-    }
-  }
+  const [open, setOpen] = useState(false);
 
   return (
     <>
-      <button className={className} onClick={go} disabled={busy}>
-        {busy ? "Opening secure checkout…" : children}
+      <button className={className} onClick={() => setOpen(true)}>
+        {children}
       </button>
-      {error && (
-        <p style={{ color: "var(--red)", fontSize: "0.85rem", marginTop: 8 }}>
-          {error}
-        </p>
+      {open && (
+        <CheckoutModal
+          onClose={() => setOpen(false)}
+          checkout={(withPack) =>
+            checkout({ origin: window.location.origin, withPack })
+          }
+        />
       )}
     </>
   );

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useAction } from "convex/react";
 import { api } from "@/convex/_generated/api";
-import { fbqTrack } from "@/components/MetaPixel";
+import { CheckoutModal } from "@/components/CheckoutModal";
 
 export function UnlockButton({
   label = "Unlock everything for $19",
@@ -13,35 +13,23 @@ export function UnlockButton({
   block?: boolean;
 }) {
   const checkout = useAction(api.stripeNode.createCheckoutSession);
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  async function go() {
-    setBusy(true);
-    setError(null);
-    fbqTrack("InitiateCheckout", { value: 19, currency: "USD" });
-    try {
-      const { url } = await checkout({ origin: window.location.origin });
-      window.location.href = url;
-    } catch {
-      setError("Checkout isn't available yet — please try again shortly.");
-      setBusy(false);
-    }
-  }
+  const [open, setOpen] = useState(false);
 
   return (
     <>
       <button
         className={`btn btn-accent ${block ? "btn-block" : "btn-sm"}`}
-        onClick={go}
-        disabled={busy}
+        onClick={() => setOpen(true)}
       >
-        {busy ? "Opening checkout…" : label}
+        {label}
       </button>
-      {error && (
-        <p style={{ color: "var(--red)", fontSize: "0.82rem", marginTop: 6 }}>
-          {error}
-        </p>
+      {open && (
+        <CheckoutModal
+          onClose={() => setOpen(false)}
+          checkout={(withPack) =>
+            checkout({ origin: window.location.origin, withPack })
+          }
+        />
       )}
     </>
   );
