@@ -8,6 +8,18 @@ const ITEMS: { q: string; a: string }[] = [
     a: "No. If you can fill in a birthday card, you can use this. There's a friendly 3-step setup, then everything has its own button. No manual, no settings to wrestle with.",
   },
   {
+    q: "My vet already has all his records.",
+    a: "They do, during their office hours, in their system. You need yours at the boarding desk on a Saturday, at a 2am emergency clinic that has never met your pet, on a trip, and if you ever switch vets. Your copy is the one that travels with you.",
+  },
+  {
+    q: "I only have one pet. Is it still worth it?",
+    a: "One pet still racks up years of shots, meds, vet visits, and weights. It's $19 once for that whole history, which is less than the late fee on one missed boarding reservation.",
+  },
+  {
+    q: "I already keep a folder of his records.",
+    a: "A folder can't remind you a shot is due, can't be in your pocket at the clinic, and can't fill out a sitter sheet for you. It also tends to be at home exactly when you need it somewhere else.",
+  },
+  {
     q: "Is it really a one-time payment?",
     a: "Yes. Pay $19 once and it's yours. No subscription, no monthly fee, no surprise charge next year. We'd rather you tell a friend than dread a renewal.",
   },

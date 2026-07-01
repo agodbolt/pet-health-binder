@@ -4,6 +4,7 @@ import { BuyButton } from "@/components/BuyButton";
 import { Reveal } from "@/components/landing/Reveal";
 import { Faq } from "@/components/landing/Faq";
 import { TrackViewContent } from "@/components/landing/TrackViewContent";
+import { Sparkline } from "@/components/Sparkline";
 
 export default function LandingPage() {
   return (
@@ -15,8 +16,11 @@ export default function LandingPage() {
       <Problem />
       <Scenarios />
       <Solution />
+      <CompleteRecord />
       <Features />
+      <PeekInside />
       <SitterSpotlight />
+      <SystemsFail />
       <Comparison />
       <FitOrNot />
       <Testimonials />
@@ -268,6 +272,31 @@ function Problem() {
           trusted.
         </p>
       </Reveal>
+      <Reveal delay={200}>
+        <div
+          className="card"
+          style={{ marginTop: 22, background: "var(--cream)" }}
+        >
+          <div style={{ fontWeight: 700, marginBottom: 10 }}>
+            Here&apos;s what the scattered version costs, sooner or later:
+          </div>
+          <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "grid", gap: 8 }}>
+            {[
+              "A vaccine record you can&apos;t produce at the boarding desk",
+              "A missed dose nobody noticed until the itching came back",
+              "Retyping the same instructions for every sitter, every trip",
+              "Digging through two years of email while the vet waits",
+              "A partner or kid who has no idea what he takes or who to call",
+              "Guessing, out loud, at the emergency clinic",
+            ].map((t) => (
+              <li key={t} className="row gap-1" style={{ alignItems: "flex-start" }}>
+                <span style={{ color: "var(--red)" }}>✕</span>
+                <span className="muted" dangerouslySetInnerHTML={{ __html: t }} />
+              </li>
+            ))}
+          </ul>
+        </div>
+      </Reveal>
     </section>
   );
 }
@@ -314,6 +343,29 @@ function Scenarios() {
           </Reveal>
         ))}
       </div>
+      <Reveal delay={120}>
+        <div className="center" style={{ marginTop: 34 }}>
+          <p className="muted" style={{ marginBottom: 12 }}>
+            And all the smaller moments in between:
+          </p>
+          <div className="row gap-1 wrap" style={{ justifyContent: "center" }}>
+            {[
+              "Before boarding",
+              "Before travel",
+              "At the emergency vet",
+              "Switching vets",
+              "Handing off to a sitter",
+              "When meds change",
+              "At the groomer",
+              "New puppy paperwork",
+            ].map((m) => (
+              <span key={m} className="chip chip-neutral" style={{ fontSize: "0.85rem" }}>
+                {m}
+              </span>
+            ))}
+          </div>
+        </div>
+      </Reveal>
     </section>
   );
 }
@@ -337,6 +389,67 @@ function Solution() {
           </p>
         </Reveal>
       </div>
+    </section>
+  );
+}
+
+/* -------------------------------------------------------- complete record */
+function CompleteRecord() {
+  const items = [
+    ["💉", "Vaccinations & due dates"],
+    ["💊", "Medications & dosing instructions"],
+    ["🩺", "Vet visit history & diagnoses"],
+    ["📅", "Follow-up reminders"],
+    ["⚖️", "Weight history & trend"],
+    ["🛁", "Grooming & recurring care schedule"],
+    ["🧾", "Vet costs & spending by category"],
+    ["🔖", "Microchip number"],
+    ["📇", "Vet & emergency vet contacts"],
+    ["🍽️", "Feeding & daily routine"],
+    ["💭", "Quirks & behavior notes"],
+    ["🖨️", "Printable vaccine record"],
+    ["📋", "Printable sitter sheet"],
+    ["💾", "A full backup you can download"],
+  ];
+  return (
+    <section className="container" style={{ padding: "72px 24px 24px" }}>
+      <Reveal>
+        <div className="center" style={{ marginBottom: 36 }}>
+          <span className="eyebrow">Not a notes app</span>
+          <h2 style={{ fontSize: "clamp(1.8rem, 3.2vw, 2.3rem)", margin: "10px 0 8px" }}>
+            Your pet&apos;s complete life record
+          </h2>
+          <p className="muted" style={{ maxWidth: 560, margin: "0 auto" }}>
+            Fourteen kinds of information a pet accumulates over a lifetime,
+            kept in one place that&apos;s always with you.
+          </p>
+        </div>
+      </Reveal>
+      <Reveal delay={80}>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(230px, 1fr))",
+            gap: 12,
+          }}
+        >
+          {items.map(([icon, label]) => (
+            <div
+              key={label}
+              className="row gap-1"
+              style={{
+                background: "var(--paper)",
+                border: "1px solid var(--line)",
+                borderRadius: 12,
+                padding: "10px 14px",
+              }}
+            >
+              <span style={{ fontSize: 18 }}>{icon}</span>
+              <span style={{ fontSize: "0.92rem", fontWeight: 500 }}>{label}</span>
+            </div>
+          ))}
+        </div>
+      </Reveal>
     </section>
   );
 }
@@ -414,6 +527,92 @@ function Features() {
   );
 }
 
+/* ------------------------------------------------------------ peek inside */
+function PeekInside() {
+  return (
+    <section style={{ background: "var(--paper)", borderTop: "1px solid var(--line)", borderBottom: "1px solid var(--line)" }}>
+      <div className="container" style={{ padding: "72px 24px" }}>
+        <Reveal>
+          <div className="center" style={{ marginBottom: 40 }}>
+            <span className="eyebrow">A peek inside</span>
+            <h2 style={{ fontSize: "clamp(1.8rem, 3.2vw, 2.3rem)", margin: "10px 0 8px" }}>
+              This is what &ldquo;ready&rdquo; looks like
+            </h2>
+            <p className="muted">Three of the binder&apos;s screens, doing their job.</p>
+          </div>
+        </Reveal>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(270px, 1fr))",
+            gap: 20,
+            alignItems: "start",
+          }}
+        >
+          {/* vaccine status */}
+          <Reveal>
+            <div className="card lift">
+              <div className="eyebrow" style={{ marginBottom: 12 }}>Vaccines</div>
+              {[
+                ["Bordetella", "chip-ok", "✅ Current"],
+                ["DHPP", "chip-amber", "⚠️ Due in 21d"],
+                ["Rabies", "chip-red", "❌ Overdue 12d"],
+              ].map(([name, cls, label]) => (
+                <div
+                  key={name}
+                  className="row"
+                  style={{ justifyContent: "space-between", padding: "9px 0", borderBottom: "1px solid var(--line)" }}
+                >
+                  <span style={{ fontWeight: 600, fontSize: "0.95rem" }}>{name}</span>
+                  <span className={`chip ${cls}`}>{label}</span>
+                </div>
+              ))}
+              <p className="faint" style={{ margin: "12px 0 0", fontSize: "0.82rem" }}>
+                It flags what&apos;s due before it lapses.
+              </p>
+            </div>
+          </Reveal>
+          {/* today's doses */}
+          <Reveal delay={80}>
+            <div className="card lift">
+              <div className="eyebrow" style={{ marginBottom: 12 }}>Today&apos;s doses</div>
+              <div style={{ background: "var(--cream)", borderRadius: 12, padding: "12px 14px", marginBottom: 10 }}>
+                <div style={{ fontWeight: 600, fontSize: "0.95rem" }}>
+                  Apoquel <span className="faint" style={{ fontWeight: 400 }}>· 16 mg · twice daily</span>
+                </div>
+                <div className="faint" style={{ fontSize: "0.8rem", margin: "2px 0 8px" }}>🔥 12-day streak</div>
+                <div className="row gap-1">
+                  <span className="chip chip-ok">✓ Morning</span>
+                  <span className="chip chip-neutral">○ Evening</span>
+                </div>
+              </div>
+              <p className="faint" style={{ margin: 0, fontSize: "0.82rem" }}>
+                Tap as you give it. Resets every morning.
+              </p>
+            </div>
+          </Reveal>
+          {/* weight trend */}
+          <Reveal delay={160}>
+            <div className="card lift">
+              <div className="eyebrow" style={{ marginBottom: 12 }}>Weight trend</div>
+              <div className="center" style={{ padding: "8px 0 4px" }}>
+                <Sparkline values={[64.2, 65.0, 66.1, 65.4, 66.8, 67.3]} width={220} height={64} />
+                <div className="row" style={{ justifyContent: "space-between", fontSize: "0.78rem" }}>
+                  <span className="faint">Aug</span>
+                  <span style={{ fontWeight: 600 }}>67.3 lb</span>
+                </div>
+              </div>
+              <p className="faint" style={{ margin: "10px 0 0", fontSize: "0.82rem" }}>
+                The slow creep becomes visible early.
+              </p>
+            </div>
+          </Reveal>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 /* ----------------------------------------------------------- sitter sheet */
 function SitterSpotlight() {
   return (
@@ -483,6 +682,60 @@ function SitterRow({ label, value }: { label: string; value: string }) {
       <strong style={{ color: "var(--forest)" }}>{label}</strong>
       <span className="muted">{value}</span>
     </div>
+  );
+}
+
+/* ------------------------------------------------------------ systems fail */
+function SystemsFail() {
+  const systems = [
+    ["📧", "Email", "Search &lsquo;rabies,&rsquo; scroll, squint, give up, call the clinic."],
+    ["📷", "The camera roll", "A photo of a vaccine card from two phones ago, somewhere between 9,000 screenshots."],
+    ["🗒️", "Sticky notes", "Gone by the time the sitter arrives. Nobody knows what &lsquo;1/2 pill PM&rsquo; meant anyway."],
+    ["🧠", "Memory", "The worst filing cabinet ever invented, and the only one you can&apos;t hand to someone else."],
+    ["📁", "The folder", "Sitting at home, being very organized, while you stand at the emergency clinic."],
+  ];
+  return (
+    <section className="container" style={{ padding: "64px 24px 8px", maxWidth: 820 }}>
+      <Reveal>
+        <div className="center" style={{ marginBottom: 30 }}>
+          <span className="eyebrow">The uncomfortable part</span>
+          <h2 style={{ fontSize: "clamp(1.7rem, 3vw, 2.2rem)", margin: "10px 0" }}>
+            You already have a system. That&apos;s the problem.
+          </h2>
+        </div>
+      </Reveal>
+      <div className="stack" style={{ gap: 10 }}>
+        {systems.map(([icon, name, why], i) => (
+          <Reveal key={name} delay={i * 60}>
+            <div
+              className="row gap-2"
+              style={{
+                background: "var(--paper)",
+                border: "1px solid var(--line)",
+                borderRadius: 14,
+                padding: "12px 16px",
+                alignItems: "flex-start",
+              }}
+            >
+              <span style={{ fontSize: 22 }}>{icon}</span>
+              <div>
+                <strong>{name}</strong>{" "}
+                <span
+                  className="muted"
+                  dangerouslySetInnerHTML={{ __html: why }}
+                />
+              </div>
+            </div>
+          </Reveal>
+        ))}
+      </div>
+      <Reveal delay={120}>
+        <p className="center muted" style={{ marginTop: 22, fontSize: "1.05rem" }}>
+          None of them tap you on the shoulder before a shot lapses or a refill
+          runs out. The binder does.
+        </p>
+      </Reveal>
+    </section>
   );
 }
 
@@ -556,10 +809,12 @@ function FitOrNot() {
           <h3 style={{ fontSize: "1.3rem", marginBottom: 14 }}>This is for you if…</h3>
           <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "grid", gap: 12 }}>
             {[
-              "Your pet is family, and you&apos;d feel awful fumbling for answers in an emergency",
-              "You&apos;ve got more than one animal and more than one schedule to track",
-              "You board, travel, or hand your pet to a sitter or dog-walker",
-              "You like things calm, simple, and in one place",
+              "New puppy or kitten owners, before the paperwork pile starts",
+              "Senior pets, where the history actually matters",
+              "Pets on ongoing medications",
+              "Multi-pet households with more than one schedule to track",
+              "Frequent travelers, boarders, and anyone with a sitter or walker",
+              "Anyone who&apos;d feel awful fumbling for answers in an emergency",
             ].map((t) => (
               <li key={t} className="row gap-1" style={{ alignItems: "flex-start" }}>
                 <span style={{ color: "var(--green-ok)" }}>✓</span>
@@ -673,8 +928,12 @@ function Pricing() {
         <h2 style={{ fontSize: "clamp(1.8rem, 3vw, 2.3rem)", margin: "10px 0 6px" }}>
           One price. However many pets you love.
         </h2>
-        <p className="muted" style={{ marginBottom: 28 }}>
+        <p className="muted" style={{ marginBottom: 8 }}>
           Less than one bag of the good treats.
+        </p>
+        <p className="muted" style={{ marginBottom: 28, maxWidth: 480, marginLeft: "auto", marginRight: "auto" }}>
+          You don&apos;t get to choose when the emergency happens. You do get to
+          choose whether you&apos;re ready.
         </p>
       </Reveal>
       <Reveal delay={80}>
@@ -736,10 +995,16 @@ function FinalCta() {
           <h2 style={{ color: "#fff", fontSize: "clamp(1.9rem, 3.4vw, 2.6rem)", marginBottom: 16 }}>
             Don&apos;t wait for the 2am scramble to wish you&apos;d done this.
           </h2>
+          <p style={{ color: "rgba(255,255,255,0.85)", fontSize: "1.1rem", marginBottom: 12 }}>
+            You&apos;ll spend hundreds of dollars this year on their food, their
+            vet, their treats. The last thing you should be doing on the worst
+            night of the year is searching for paperwork.
+          </p>
           <p style={{ color: "rgba(255,255,255,0.85)", fontSize: "1.1rem", marginBottom: 24 }}>
-            Ten quiet minutes today buys you a calm answer on the worst day. Set
-            up your binder once. After that it&apos;s with you, your sitter, and
-            your vet, from now on.
+            Ten quiet minutes today buys you a calm answer on that day. Set up
+            your binder once. After that it&apos;s with you, your sitter, and
+            your vet, from now on, so you can focus on your pet instead of the
+            records.
           </p>
           <BuyButton className="btn btn-accent">Get my binder for $19</BuyButton>
           <p style={{ color: "rgba(255,255,255,0.7)", fontSize: "0.85rem", marginTop: 14 }}>
