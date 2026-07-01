@@ -46,11 +46,17 @@ function Welcome() {
         // Reaching /welcome with a paid session IS the completed purchase.
         if (info.paid && !purchaseTracked.current) {
           purchaseTracked.current = true;
-          fbqTrack("Purchase", {
-            value: info.hasPack ? 28 : 19,
-            currency: "USD",
-            content_name: "Pet Health Binder",
-          });
+          // eventId = Stripe session id, matching the server-side CAPI event
+          // fired by the webhook, so Meta de-duplicates the pair.
+          fbqTrack(
+            "Purchase",
+            {
+              value: info.hasPack ? 28 : 19,
+              currency: "USD",
+              content_name: "Pet Health Binder",
+            },
+            sessionId ?? undefined
+          );
         }
       })
       .catch(() => setPaid(false));

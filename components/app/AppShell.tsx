@@ -68,15 +68,21 @@ export function AppShell({ children }: { children: ReactNode }) {
     }
   }, [isAuthenticated, ensureProfile]);
 
-  // ?paid=1 (in-app upgrade success redirect) fires the Meta Purchase event once
+  // ?paid=1 (in-app upgrade success redirect) fires the Meta Purchase event once.
+  // eventId = Stripe session id from the success URL, matching the server-side
+  // CAPI event so Meta de-duplicates.
   useEffect(() => {
     if (search.get("paid") === "1" && !purchaseTracked.current) {
       purchaseTracked.current = true;
-      fbqTrack("Purchase", {
-        value: 19,
-        currency: "USD",
-        content_name: "Pet Health Binder",
-      });
+      fbqTrack(
+        "Purchase",
+        {
+          value: 19,
+          currency: "USD",
+          content_name: "Pet Health Binder",
+        },
+        search.get("session_id") ?? undefined
+      );
     }
   }, [search]);
 

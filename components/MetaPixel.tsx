@@ -12,10 +12,20 @@ declare global {
   }
 }
 
-/** Safe wrapper — fires a Meta event only if the pixel has loaded. */
-export function fbqTrack(event: string, params?: Record<string, unknown>) {
+/** Safe wrapper — fires a Meta event only if the pixel has loaded.
+ *  Pass eventId when the same event is also sent server-side (Conversions
+ *  API) so Meta can de-duplicate the pair. */
+export function fbqTrack(
+  event: string,
+  params?: Record<string, unknown>,
+  eventId?: string
+) {
   if (typeof window !== "undefined" && typeof window.fbq === "function") {
-    window.fbq("track", event, params);
+    if (eventId) {
+      window.fbq("track", event, params, { eventID: eventId });
+    } else {
+      window.fbq("track", event, params);
+    }
   }
 }
 

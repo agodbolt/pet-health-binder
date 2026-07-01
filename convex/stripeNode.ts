@@ -1,6 +1,7 @@
 "use node";
 
 import Stripe from "stripe";
+import { createHash } from "node:crypto";
 import { action, internalAction } from "./_generated/server";
 import { internal } from "./_generated/api";
 import { v } from "convex/values";
@@ -10,6 +11,55 @@ import type { Id } from "./_generated/dataModel";
 const PRICE_CENTS = 1900; // $19 core
 const PACK_CENTS = 900; // $9 Pet Emergency Kit order bump
 const PACK_THRESHOLD = PRICE_CENTS + PACK_CENTS; // total when the bump is included
+
+const META_PIXEL_ID = "1020983093776998";
+
+/**
+ * Server-side Meta Conversions API Purchase event. Fired from the Stripe
+ * webhook so iOS / ad-blocker users are still counted. event_id = the Stripe
+ * session id, which the browser pixel also sends, so Meta de-duplicates.
+ * Never throws: a tracking failure must not fail payment fulfillment.
+ */
+async function sendCapiPurchase(session: Stripe.Checkout.Session) {
+  const token = process.env.META_CAPI_ACCESS_TOKEN;
+  if (!token) return;
+  try {
+    const email = session.customer_details?.email?.trim().toLowerCase();
+    const body = {
+      data: [
+        {
+          event_name: "Purchase",
+          event_time: Math.floor(Date.now() / 1000),
+          event_id: session.id,
+          action_source: "website",
+          event_source_url: "https://binder.canpeteat.com/welcome",
+          user_data: {
+            em: email
+              ? [createHash("sha256").update(email).digest("hex")]
+              : [],
+          },
+          custom_data: {
+            value: (session.amount_total ?? PRICE_CENTS) / 100,
+            currency: "usd",
+            content_name: "Pet Health Binder",
+          },
+        },
+      ],
+    };
+    const res = await fetch(
+      `https://graph.facebook.com/v21.0/${META_PIXEL_ID}/events?access_token=${token}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      }
+    );
+    const out = await res.text();
+    console.log(`CAPI purchase ${session.id}: ${res.status} ${out.slice(0, 200)}`);
+  } catch (err) {
+    console.error("CAPI purchase failed:", (err as Error).message);
+  }
+}
 
 function stripeClient() {
   const key = process.env.STRIPE_SECRET_KEY;
@@ -62,7 +112,7 @@ export const createCheckoutSession = action({
       payment_method_types: ["card"],
       client_reference_id: userId,
       line_items: lineItems(Boolean(withPack)),
-      success_url: `${origin}/app?paid=1`,
+      success_url: `${origin}/app?paid=1&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/app?canceled=1`,
     });
     if (!session.url) throw new Error("Stripe did not return a checkout URL.");
@@ -147,6 +197,8 @@ export const handleWebhook = internalAction({
 
     if (event.type === "checkout.session.completed") {
       const session = event.data.object as Stripe.Checkout.Session;
+      // Server-side Meta Purchase for every completed checkout (guest or in-app).
+      await sendCapiPurchase(session);
       const userId = session.client_reference_id as Id<"users"> | null;
       if (userId) {
         await ctx.runMutation(internal.payments.fulfillPayment, {
