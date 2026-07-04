@@ -535,3 +535,14 @@ p {
     margin: 1.5cm;
   }
 }
+
+/* On phones a full log table is wider than the screen and was dragging the
+   whole page sideways (vitals measured 426px on a 375px viewport). Below the
+   sidebar breakpoint the table scrolls in its own box instead. */
+@media (max-width: 767px) {
+  .table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
