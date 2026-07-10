@@ -7,7 +7,7 @@ import { useAction } from "convex/react";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { api } from "@/convex/_generated/api";
 import { Paw } from "@/components/PawMotif";
-import { fbqTrack } from "@/components/MetaPixel";
+import { fbqTrack, metaBrowserIds } from "@/components/MetaPixel";
 
 export default function WelcomePage() {
   return (
@@ -185,7 +185,7 @@ function BuyAgain() {
       onClick={async () => {
         setBusy(true);
         try {
-          const { url } = await checkout({ origin: window.location.origin });
+          const { url } = await checkout({ origin: window.location.origin, ...metaBrowserIds() });
           window.location.href = url;
         } catch {
           setBusy(false);

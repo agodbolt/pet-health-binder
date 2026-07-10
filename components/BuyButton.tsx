@@ -1,5 +1,7 @@
 "use client";
 
+import { metaBrowserIds } from "@/components/MetaPixel";
+
 import { useState } from "react";
 import { useAction } from "convex/react";
 import { api } from "@/convex/_generated/api";
@@ -26,7 +28,7 @@ export function BuyButton({
         <CheckoutModal
           onClose={() => setOpen(false)}
           checkout={(withPack) =>
-            checkout({ origin: window.location.origin, withPack })
+            checkout({ origin: window.location.origin, withPack, ...metaBrowserIds() })
           }
         />
       )}

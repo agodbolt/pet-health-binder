@@ -37,6 +37,14 @@ async function sendCapiPurchase(session: Stripe.Checkout.Session) {
             em: email
               ? [createHash("sha256").update(email).digest("hex")]
               : [],
+            // _fbc carries the ad-click id (fbclid): it is what lets Meta
+            // attribute this purchase to an ad in Ads Manager. _fbp and the
+            // user agent further raise event match quality.
+            ...(session.metadata?.fbp ? { fbp: session.metadata.fbp } : {}),
+            ...(session.metadata?.fbc ? { fbc: session.metadata.fbc } : {}),
+            ...(session.metadata?.ua
+              ? { client_user_agent: session.metadata.ua }
+              : {}),
           },
           custom_data: {
             value: (session.amount_total ?? PRICE_CENTS) / 100,
@@ -59,6 +67,27 @@ async function sendCapiPurchase(session: Stripe.Checkout.Session) {
   } catch (err) {
     console.error("CAPI purchase failed:", (err as Error).message);
   }
+}
+
+/** Meta browser identifiers captured at checkout time, carried through Stripe
+ *  session metadata so the webhook's server-side event can attribute the sale
+ *  back to the ad click. Values are size-capped for Stripe's metadata limits. */
+const metaIdArgs = {
+  fbp: v.optional(v.string()),
+  fbc: v.optional(v.string()),
+  userAgent: v.optional(v.string()),
+};
+
+function metaIdMetadata(args: {
+  fbp?: string;
+  fbc?: string;
+  userAgent?: string;
+}): Record<string, string> {
+  const out: Record<string, string> = {};
+  if (args.fbp) out.fbp = args.fbp.slice(0, 480);
+  if (args.fbc) out.fbc = args.fbc.slice(0, 480);
+  if (args.userAgent) out.ua = args.userAgent.slice(0, 480);
+  return out;
 }
 
 function stripeClient() {
@@ -102,8 +131,15 @@ function lineItems(withPack: boolean) {
 
 /** Checkout for the signed-in user (in-app upgrade). */
 export const createCheckoutSession = action({
-  args: { origin: v.string(), withPack: v.optional(v.boolean()) },
-  handler: async (ctx, { origin, withPack }): Promise<{ url: string }> => {
+  args: {
+    origin: v.string(),
+    withPack: v.optional(v.boolean()),
+    ...metaIdArgs,
+  },
+  handler: async (
+    ctx,
+    { origin, withPack, ...metaIds }
+  ): Promise<{ url: string }> => {
     const userId = (await getAuthUserId(ctx)) as Id<"users"> | null;
     if (!userId) throw new Error("You need to be signed in to purchase.");
     const stripe = stripeClient();
@@ -112,6 +148,7 @@ export const createCheckoutSession = action({
       payment_method_types: ["card"],
       client_reference_id: userId,
       line_items: lineItems(Boolean(withPack)),
+      metadata: metaIdMetadata(metaIds),
       success_url: `${origin}/app?paid=1&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/app?canceled=1`,
     });
@@ -122,13 +159,21 @@ export const createCheckoutSession = action({
 
 /** Checkout for a NEW buyer (no account yet). Stripe collects email + payment. */
 export const createGuestCheckout = action({
-  args: { origin: v.string(), withPack: v.optional(v.boolean()) },
-  handler: async (_ctx, { origin, withPack }): Promise<{ url: string }> => {
+  args: {
+    origin: v.string(),
+    withPack: v.optional(v.boolean()),
+    ...metaIdArgs,
+  },
+  handler: async (
+    _ctx,
+    { origin, withPack, ...metaIds }
+  ): Promise<{ url: string }> => {
     const stripe = stripeClient();
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       payment_method_types: ["card"],
       line_items: lineItems(Boolean(withPack)),
+      metadata: metaIdMetadata(metaIds),
       success_url: `${origin}/welcome?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/`,
     });

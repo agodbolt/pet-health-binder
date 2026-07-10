@@ -18,15 +18,51 @@ declare global {
 export function fbqTrack(
   event: string,
   params?: Record<string, unknown>,
-  eventId?: string
+  eventId?: string,
+  attempt = 0
 ) {
-  if (typeof window !== "undefined" && typeof window.fbq === "function") {
-    if (eventId) {
-      window.fbq("track", event, params, { eventID: eventId });
-    } else {
-      window.fbq("track", event, params);
+  if (typeof window === "undefined") return;
+  if (typeof window.fbq !== "function") {
+    // fbevents.js may not have run yet (e.g. arriving back from Stripe).
+    // Retry briefly instead of silently dropping the event.
+    if (attempt < 20) {
+      setTimeout(() => fbqTrack(event, params, eventId, attempt + 1), 500);
     }
+    return;
   }
+  if (eventId) {
+    window.fbq("track", event, params, { eventID: eventId });
+  } else {
+    window.fbq("track", event, params);
+  }
+}
+
+/** Read Meta's browser identifiers so checkout can carry them to the server.
+ *  _fbc exists when the visitor arrived through an ad click (it embeds the
+ *  fbclid); _fbp identifies the browser. Both power Ads Manager attribution
+ *  for the server-side Purchase event. */
+export function metaBrowserIds(): {
+  fbp?: string;
+  fbc?: string;
+  userAgent?: string;
+} {
+  if (typeof document === "undefined") return {};
+  const read = (name: string) =>
+    document.cookie
+      .split("; ")
+      .find((c) => c.startsWith(`${name}=`))
+      ?.split("=")
+      .slice(1)
+      .join("=");
+  const out: { fbp?: string; fbc?: string; userAgent?: string } = {};
+  const fbp = read("_fbp");
+  const fbc = read("_fbc");
+  if (fbp) out.fbp = fbp;
+  if (fbc) out.fbc = fbc;
+  if (typeof navigator !== "undefined" && navigator.userAgent) {
+    out.userAgent = navigator.userAgent;
+  }
+  return out;
 }
 
 // Fire PageView on client-side route changes (the inline snippet covers the
